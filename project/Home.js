@@ -1,10 +1,44 @@
-// Get references to the navigation links and target sections
-const links = {
-    home: document.getElementById('home-link'),
-    about: document.getElementById('about-link'),
-    doctors: document.getElementById('doctors-link'),
-    // Add references for other links and sections here
-  };
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all the links
+  const homeLink = document.getElementById('home-link');
+  const aboutLink = document.getElementById('about-link');
+  const doctorsLink = document.getElementById('doctors-link');
+  const serviceLink = document.getElementById('Service-link');
+  const departmentsLink = document.getElementById('Departments');
+  const contactLink = document.getElementById('Contact');
+
+  // Add click event listeners to each link
+  homeLink.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default behavior of the link
+      window.location.href = 'Home.html'; // Navigate to Home.html
+  });
+
+  aboutLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.location.href = 'About.html';
+  });
+
+  doctorsLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.location.href = 'Doctors.html';
+  });
+
+  serviceLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      // Handle Service page navigation
+  });
+
+  departmentsLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      // Handle Departments page navigation
+  });
+
+  contactLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      // Handle Contact page navigation
+  });
+});
+
   
   const sections = {
     home: document.getElementById('home-section'),

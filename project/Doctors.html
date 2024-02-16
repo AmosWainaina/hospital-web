@@ -6,10 +6,35 @@
     <link rel="stylesheet" href="Home.html">
     <link rel="stylesheet" href="Doc.css">
 </head>
+<script>
+    window.onload = function() {
+        // Get the home link
+        const homeLink = document.getElementById('home-link');
+
+        homeLink.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            window.location.href = 'Home.html'; 
+        });
+    };
+</script>
+<style>
+    .background-image {
+    background-image: url('images/Background.png');
+    background-size: cover; 
+    background-position: center; 
+    width: 100%;
+    height: 100vh; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    z-index: -1; 
+}
+</style>
 <body>
     <header>
         <h1>DOCTORS</h1>
     </header>
+
 
     <section class="image-section">
         <nav>
@@ -35,6 +60,13 @@
     <footer>
         <h1>QUALITY CARE </h1>
     </footer>
+
+    
+    <div>
+        <ul>
+            <li><a href="#" id="home-link">Home</a></li>
+        </ul>
+    </div>
     
     
     <div class="background-image">
