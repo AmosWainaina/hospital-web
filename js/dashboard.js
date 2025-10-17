@@ -9,6 +9,7 @@ import {
   getServicesByDepartment,
   createAppointment,
   getPatientAppointments,
+  updateAppointmentStatus,
   createCheckIn,
   checkOut,
   getActiveCheckIn,

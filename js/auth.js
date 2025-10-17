@@ -34,16 +34,19 @@ function updateUIForAuthState(isAuthenticated) {
   const logoutBtn = document.getElementById('logout-btn');
   const dashboardNav = document.getElementById('dashboard-nav');
   const dashboardSection = document.getElementById('dashboard');
+  const authContainer = document.getElementById('auth-container');
 
   if (isAuthenticated) {
     loginBtn.classList.add('hidden');
     logoutBtn.classList.remove('hidden');
     dashboardNav.classList.remove('hidden');
+    authContainer.classList.add('auth-hidden');
   } else {
     loginBtn.classList.remove('hidden');
     logoutBtn.classList.add('hidden');
     dashboardNav.classList.add('hidden');
     dashboardSection.classList.add('hidden');
+    authContainer.classList.add('auth-hidden');
 
     const hash = window.location.hash;
     if (hash === '#dashboard') {
