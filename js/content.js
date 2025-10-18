@@ -107,7 +107,7 @@ export function setupNavigation() {
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const navLinksContainer = document.getElementById('nav-links');
 
-  if (mobileMenuToggle) {
+  if (mobileMenuToggle && navLinksContainer) {
     mobileMenuToggle.addEventListener('click', () => {
       navLinksContainer.classList.toggle('active');
     });

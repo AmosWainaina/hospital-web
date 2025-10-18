@@ -17,15 +17,28 @@ export async function initAuth() {
 
   supabase.auth.onAuthStateChange((event, session) => {
     (async () => {
-      if (event === 'SIGNED_IN' && session) {
-        currentUser = session.user;
-        const patient = await getPatientProfile(session.user.id);
-        currentPatient = patient;
-        updateUIForAuthState(true);
-      } else if (event === 'SIGNED_OUT') {
-        currentUser = null;
-        currentPatient = null;
-        updateUIForAuthState(false);
+      try {
+        if (event === 'SIGNED_IN' && session) {
+          currentUser = session.user;
+          const patient = await getPatientProfile(session.user.id);
+          currentPatient = patient;
+          updateUIForAuthState(true);
+        } else if (event === 'SIGNED_OUT') {
+          currentUser = null;
+          currentPatient = null;
+          updateUIForAuthState(false);
+        }
+      } catch (error) {
+        console.error('Error in auth state change:', error);
+        // Ensure UI is updated even on error
+        if (event === 'SIGNED_IN' && session) {
+          currentUser = session.user;
+          updateUIForAuthState(true);
+        } else if (event === 'SIGNED_OUT') {
+          currentUser = null;
+          currentPatient = null;
+          updateUIForAuthState(false);
+        }
       }
     })();
   });
