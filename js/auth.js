@@ -138,12 +138,16 @@ export function setupAuthListeners() {
   closeAuthBtn.addEventListener('click', () => {
     authContainer.classList.add('auth-hidden');
     document.body.style.overflow = 'auto';
+    loginForm.reset();
+    registerForm.reset();
   });
 
   authContainer.addEventListener('click', (e) => {
     if (e.target === authContainer) {
       authContainer.classList.add('auth-hidden');
       document.body.style.overflow = 'auto';
+      loginForm.reset();
+      registerForm.reset();
     }
   });
 
