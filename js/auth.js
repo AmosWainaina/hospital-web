@@ -83,6 +83,7 @@ export async function register(email, password, profileData) {
       await createPatientProfile(data.user.id, profileData);
     } catch (profileError) {
       console.error('Error creating patient profile:', profileError);
+      throw profileError;
     }
   }
 
@@ -120,7 +121,8 @@ export function setupAuthListeners() {
     document.body.style.overflow = 'hidden';
   });
 
-  closeAuthBtn.addEventListener('click', () => {
+  closeAuthBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
     authContainer.classList.add('auth-hidden');
     document.body.style.overflow = 'auto';
   });
