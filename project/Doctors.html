@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors</title>
+    <link rel="stylesheet" href="Home.html">
+    <link rel="stylesheet" href="Doc.css">
+</head>
+<script>
+    window.onload = function() {
+        // Get the home link
+        const homeLink = document.getElementById('home-link');
+
+        homeLink.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            window.location.href = 'Home.html'; 
+        });
+    };
+</script>
+<style>
+    .background-image {
+    background-image: url('images/Background.png');
+    background-size: cover; 
+    background-position: center; 
+    width: 100%;
+    height: 100vh; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    z-index: -1; 
+    }
+
+
+    footer{
+        justify-content: center;
+    display: flex;
+    padding: 50px 100px;
+    font: bold;
+    }
+
+    aside,h1{
+        color: antiquewhite;
+    }
+
+    aside {
+        border-bottom: 4px solid antiquewhite; 
+        padding-bottom: 10px; 
+        margin-bottom: 20px; 
+    }
+
+    .quote {
+        position: relative;
+        left: 0;
+        color: antiquewhite;
+        font-style: italic;
+    }
+</style>
+<body>
+    <header>
+        <h1>DOCTORS</h1>
+    </header>
+
+
+    <section class="image-section">
+        <nav>
+            <img src="images/Dr Anthony.jpg" alt="">
+        </nav>
+        <aside>
+            <h3>Dr.Anthony</h3>
+            <p>Head sergion</p>
+            <p class="quote">"Excellence in every surgery."</p>
+        </aside>
+        <nav>
+            <img src="images/Dr Tracy.jpg" alt="">
+           
+        </nav>
+        <aside>
+            <h3>Dr.Tracy</h3>
+            <p>sergion </p>
+            <p class="quote">"Caring for you with precision."</p>
+        </aside>
+        <nav>
+            <img src="images/Dr Mark.jpg" alt="">
+        </nav>
+        <aside>
+            <h3>Dr.Mark</h3>
+            <p>sergion </p>
+            <p class="quote">"Dedicated to your health."</p>
+        </aside>
+      
+    </section>
+    <footer>
+        <h1>QUALITY CARE </h1>
+    </footer>
+
+    
+    <div>
+        <ul>
+            <li><a href="#" id="home-link">Home</a></li>
+        </ul>
+    </div>
+    
+    
+    <div class="background-image">
+        <img src="images/Background.png" alt="">
+    </div>
+    
+</body>
+</html>
