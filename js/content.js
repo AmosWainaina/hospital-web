@@ -107,6 +107,12 @@ export function setupNavigation() {
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const navLinksContainer = document.getElementById('nav-links');
 
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+      navLinksContainer.classList.toggle('active');
+    });
+  }
+
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -130,10 +136,6 @@ export function setupNavigation() {
 
       window.location.hash = targetId;
     });
-  });
-
-  mobileMenuToggle.addEventListener('click', () => {
-    navLinksContainer.classList.toggle('active');
   });
 
   const handleHashChange = () => {

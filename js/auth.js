@@ -15,17 +15,19 @@ export async function initAuth() {
     updateUIForAuthState(false);
   }
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      currentUser = session.user;
-      const patient = await getPatientProfile(session.user.id);
-      currentPatient = patient;
-      updateUIForAuthState(true);
-    } else if (event === 'SIGNED_OUT') {
-      currentUser = null;
-      currentPatient = null;
-      updateUIForAuthState(false);
-    }
+  supabase.auth.onAuthStateChange((event, session) => {
+    (async () => {
+      if (event === 'SIGNED_IN' && session) {
+        currentUser = session.user;
+        const patient = await getPatientProfile(session.user.id);
+        currentPatient = patient;
+        updateUIForAuthState(true);
+      } else if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        currentPatient = null;
+        updateUIForAuthState(false);
+      }
+    })();
   });
 }
 
