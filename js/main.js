@@ -1,6 +1,6 @@
 import { initAuth, setupAuthListeners } from './auth.js';
 import { setupDashboard } from './dashboard.js';
-import { loadDepartments, loadDoctors, loadServices, setupNavigation, setupScrollEffects } from './content.js';
+import { loadDepartments, loadDoctors, loadServices, setupNavigation, setupScrollEffects, setupDoctorFilter } from './content.js';
 
 async function init() {
   await initAuth();
@@ -13,6 +13,7 @@ async function init() {
 
   await loadDepartments();
   await loadDoctors();
+  await setupDoctorFilter();
   await loadServices();
 
   setupScrollEffects();

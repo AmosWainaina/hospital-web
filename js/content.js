@@ -1,3 +1,5 @@
+import { getDepartments, getDoctors, getServices } from './supabase.js';
+
 const departmentIcons = {
   'emergency': '🚑',
   'cardiology': '❤️',
@@ -58,29 +60,33 @@ export async function loadDepartments() {
   const grid = document.getElementById('departments-grid');
   grid.innerHTML = '<div class="loading">Loading departments...</div>';
 
-  // Simulate async loading
-  await new Promise(resolve => setTimeout(resolve, 500));
+  try {
+    const departments = await getDepartments();
 
-  if (staticDepartments.length === 0) {
-    grid.innerHTML = '<p>No departments available at the moment.</p>';
-    return;
+    if (departments.length === 0) {
+      grid.innerHTML = '<p>No departments available at the moment.</p>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    departments.forEach(dept => {
+      const card = document.createElement('div');
+      card.className = 'department-card';
+
+      const icon = departmentIcons[dept.icon.toLowerCase()] || '🏥';
+
+      card.innerHTML = `
+        <div class="department-icon">${icon}</div>
+        <h3>${dept.name}</h3>
+        <p>${dept.description}</p>
+      `;
+
+      grid.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading departments:', error);
+    grid.innerHTML = '<p>Failed to load departments. Please try again later.</p>';
   }
-
-  grid.innerHTML = '';
-  staticDepartments.forEach(dept => {
-    const card = document.createElement('div');
-    card.className = 'department-card';
-
-    const icon = departmentIcons[dept.icon] || '🏥';
-
-    card.innerHTML = `
-      <div class="department-icon">${icon}</div>
-      <h3>${dept.name}</h3>
-      <p>${dept.description}</p>
-    `;
-
-    grid.appendChild(card);
-  });
 }
 
 const staticDoctors = [
@@ -146,39 +152,69 @@ const staticDoctors = [
   }
 ];
 
-export async function loadDoctors() {
+export async function loadDoctors(departmentFilter = null) {
   const grid = document.getElementById('doctors-grid');
   grid.innerHTML = '<div class="loading">Loading doctors...</div>';
 
-  // Simulate async loading
-  await new Promise(resolve => setTimeout(resolve, 500));
+  try {
+    const doctors = await getDoctors();
 
-  if (staticDoctors.length === 0) {
-    grid.innerHTML = '<p>No doctors available at the moment.</p>';
-    return;
+    let filteredDoctors = doctors;
+    if (departmentFilter) {
+      filteredDoctors = doctors.filter(d => d.department_id === departmentFilter);
+    }
+
+    if (filteredDoctors.length === 0) {
+      grid.innerHTML = '<p>No doctors available at the moment.</p>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    filteredDoctors.forEach(doctor => {
+      const card = document.createElement('div');
+      card.className = 'doctor-card';
+
+      card.innerHTML = `
+        <img src="${doctor.image_url}" alt="Dr. ${doctor.first_name} ${doctor.last_name}" class="doctor-image" onerror="this.src='https://via.placeholder.com/350x400?text=Dr.+${doctor.first_name}+${doctor.last_name}'">
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. ${doctor.first_name} ${doctor.last_name}</h3>
+          <p class="doctor-specialization">${doctor.specialization}</p>
+          <p class="doctor-details">
+            <strong>Qualification:</strong> ${doctor.qualification}<br>
+            <strong>Experience:</strong> ${doctor.experience_years} years
+          </p>
+          ${doctor.bio ? `<p class="doctor-bio">${doctor.bio}</p>` : ''}
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading doctors:', error);
+    grid.innerHTML = '<p>Failed to load doctors. Please try again later.</p>';
   }
+}
 
-  grid.innerHTML = '';
-  staticDoctors.forEach(doctor => {
-    const card = document.createElement('div');
-    card.className = 'doctor-card';
+export async function setupDoctorFilter() {
+  const filterSelect = document.getElementById('doctor-department-filter');
+  if (!filterSelect) return;
 
-    card.innerHTML = `
-      <img src="${doctor.image_url}" alt="Dr. ${doctor.first_name} ${doctor.last_name}" class="doctor-image" onerror="this.src='https://via.placeholder.com/350x400?text=Dr.+${doctor.first_name}+${doctor.last_name}'">
-      <div class="doctor-info">
-        <h3 class="doctor-name">Dr. ${doctor.first_name} ${doctor.last_name}</h3>
-        <p class="doctor-specialization">${doctor.specialization}</p>
-        <p class="doctor-details">
-          <strong>Qualification:</strong> ${doctor.qualification}<br>
-          <strong>Experience:</strong> ${doctor.experience_years} years<br>
-          ${doctor.department ? `<strong>Department:</strong> ${doctor.department.name}` : ''}
-        </p>
-        ${doctor.bio ? `<p class="doctor-bio">${doctor.bio}</p>` : ''}
-      </div>
-    `;
+  try {
+    const departments = await getDepartments();
+    departments.forEach(dept => {
+      const option = document.createElement('option');
+      option.value = dept.id;
+      option.textContent = dept.name;
+      filterSelect.appendChild(option);
+    });
 
-    grid.appendChild(card);
-  });
+    filterSelect.addEventListener('change', () => {
+      const selectedDept = filterSelect.value;
+      loadDoctors(selectedDept || null);
+    });
+  } catch (error) {
+    console.error('Error setting up doctor filter:', error);
+  }
 }
 
 const staticServices = [
@@ -406,31 +442,34 @@ export async function loadServices() {
   const grid = document.getElementById('services-grid');
   grid.innerHTML = '<div class="loading">Loading services...</div>';
 
-  // Simulate async loading
-  await new Promise(resolve => setTimeout(resolve, 500));
+  try {
+    const services = await getServices();
 
-  if (staticServices.length === 0) {
-    grid.innerHTML = '<p>No services available at the moment.</p>';
-    return;
+    if (services.length === 0) {
+      grid.innerHTML = '<p>No services available at the moment.</p>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    services.forEach(service => {
+      const card = document.createElement('div');
+      card.className = 'service-card';
+
+      card.innerHTML = `
+        <h3>${service.name}</h3>
+        <p>${service.description}</p>
+        <div class="service-meta">
+          <span class="service-duration">⏱️ ${service.duration_minutes} minutes</span>
+          <span class="service-price">$${parseFloat(service.price).toFixed(2)}</span>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading services:', error);
+    grid.innerHTML = '<p>Failed to load services. Please try again later.</p>';
   }
-
-  grid.innerHTML = '';
-  staticServices.forEach(service => {
-    const card = document.createElement('div');
-    card.className = 'service-card';
-
-    card.innerHTML = `
-      <h3>${service.name}</h3>
-      <p>${service.description}</p>
-      ${service.department ? `<p><strong>Department:</strong> ${service.department.name}</p>` : ''}
-      <div class="service-meta">
-        <span class="service-duration">⏱️ ${service.duration_minutes} minutes</span>
-        <span class="service-price">$${parseFloat(service.price).toFixed(2)}</span>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
 }
 
 export function setupNavigation() {
