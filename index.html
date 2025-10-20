@@ -11,81 +11,10 @@
 </head>
 <body>
     <div id="app">
-        <div id="auth-container" class="auth-hidden">
-            <div class="auth-modal">
-                <div class="auth-header">
-                    <img src="/images/care.png" alt="Care Hospital Logo" class="auth-logo">
-                    <button id="close-auth" class="close-btn">&times;</button>
-                </div>
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Login</button>
-                    <button class="auth-tab" data-tab="register">Register</button>
-                </div>
-                <div id="auth-content">
-                    <form id="login-form" class="auth-form active">
-                        <h2>Welcome Back</h2>
-                        <div class="form-group">
-                            <label for="login-email">Email</label>
-                            <input type="email" id="login-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password">Password</label>
-                            <input type="password" id="login-password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <div id="login-error" class="error-message"></div>
-                    </form>
-
-                    <form id="register-form" class="auth-form">
-                        <h2>Create Account</h2>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="register-firstname">First Name</label>
-                                <input type="text" id="register-firstname" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="register-lastname">Last Name</label>
-                                <input type="text" id="register-lastname" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-email">Email</label>
-                            <input type="email" id="register-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-password">Password</label>
-                            <input type="password" id="register-password" required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="register-phone">Phone</label>
-                                <input type="tel" id="register-phone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="register-dob">Date of Birth</label>
-                                <input type="date" id="register-dob" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-gender">Gender</label>
-                            <select id="register-gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Register</button>
-                        <div id="register-error" class="error-message"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <header id="main-header">
             <nav class="navbar">
                 <div class="nav-brand">
-                    <img src="/images/care.png" alt="Care Hospital Logo" class="logo">
+                    <img src="public/images/care.png" alt="Care Hospital Logo" class="logo">
                 </div>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#home" class="nav-link active">Home</a></li>
@@ -95,17 +24,13 @@
                     <li><a href="#services" class="nav-link">Services</a></li>
                     <li id="dashboard-nav" class="hidden"><a href="#dashboard" class="nav-link">Dashboard</a></li>
                 </ul>
-                <div class="nav-actions">
-                    <button id="login-btn" class="btn btn-outline">Login</button>
-                    <button id="logout-btn" class="btn btn-outline hidden">Logout</button>
-                </div>
-                
+
             </nav>
         </header>
 
         <main id="main-content">
             <section id="home" class="section hero-section">
-                <div class="hero-background"></div>
+                <div class="hero-background"><img src="public/images/Background.jpg" alt=""></div>
                 <div class="hero-content">
                     <div class="hero-text">
                         <h1 class="hero-title">Care Hospital</h1>
@@ -118,15 +43,15 @@
                     </div>
                     <div class="hero-images">
                         <div class="hero-image-card">
-                            <img src="/images/Ambulance.png" alt="Emergency Services">
+                            <img src="public/images/Ambulance.jpg" alt="Emergency Services">
                             <p>24/7 Emergency</p>
                         </div>
                         <div class="hero-image-card">
-                            <img src="/images/Doctors.png" alt="Expert Doctors">
+                            <img src="public/images/Doctors.jpg" alt="Expert Doctors">
                             <p>Expert Doctors</p>
                         </div>
                         <div class="hero-image-card">
-                            <img src="/images/dream.png" alt="Modern Facilities">
+                            <img src="public/images/Facility.jpg" alt="Modern Facilities">
                             <p>Modern Care</p>
                         </div>
                     </div>
@@ -152,7 +77,7 @@
                         </div>
                         <div class="about-stats">
                             <div class="stat-card">
-                                <h4>30+</h4>
+                                <h4>10+</h4>
                                 <p>Years of Excellence</p>
                             </div>
                             <div class="stat-card">
@@ -180,7 +105,17 @@
                         <p class="section-description">Comprehensive medical services across multiple specialties</p>
                     </div>
                     <div id="departments-grid" class="departments-grid">
-                        <div class="loading">Loading departments...</div>
+                        <div class="hero-image-card"><img src="public/images/Facility.jpg" alt="">
+                            <p>Intensive Care Unit</p>
+                        </div>
+                        <div class="hero-image-card"><img src="public/images/Emergency.jpg" alt="">
+                            <p>Emergency</p>
+                        </div>
+                        <div class="hero-image-card"><img src="public/images/Outpatient.jpg" alt="">
+                            <p>Outpatient</p>
+                        </div>
+                        
+
                     </div>
                 </div>
             </section>
@@ -193,7 +128,16 @@
                         <p class="section-description">Meet our highly qualified medical professionals</p>
                     </div>
                     <div id="doctors-grid" class="doctors-grid">
-                        <div class="loading">Loading doctors...</div>
+                        <div class="hero-image-card"><img src="public/images/Dr.Anthony.jpg" alt="">
+                            <p>Dr.Anthony Lead Sergion</p>
+                        </div>
+                        <div class="hero-image-card"><img src="public/images/Dr.Tracy.jpg" alt="">
+                            <p>Dr.Tracy Head Doctor</p>
+                        </div>
+                        <div class="hero-image-card"><img src="public/images/Dr.Mark.jpg" alt="">
+                            <p>Dr.Mark </p>
+                        </div>
+                        
                     </div>
                 </div>
             </section>
