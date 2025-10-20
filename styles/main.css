@@ -12,16 +12,21 @@
   --accent-color: #f59e0b;
   --error-color: #ef4444;
   --success-color: #22c55e;
+  --warning-color: #f59e0b;
   --text-dark: #1f2937;
   --text-light: #6b7280;
   --bg-light: #f9fafb;
   --bg-white: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
   --border-color: #e5e7eb;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html {
@@ -59,7 +64,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 3rem;
-  background: var(--bg-white);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
   position: fixed;
   top: 0;
@@ -119,12 +125,32 @@ body {
 .btn {
   padding: 1rem 2.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-primary {
@@ -230,7 +256,7 @@ body {
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg, rgba(8, 145, 178, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%),
-              url('../project/images/Background.png');
+              url('/images/Background.png');
   background-size: cover;
   background-position: center;
   z-index: -1;
@@ -288,15 +314,18 @@ body {
 .hero-image-card {
   background: var(--bg-white);
   padding: 3rem;
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: var(--shadow-lg);
   text-align: center;
   transition: var(--transition);
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
 .hero-image-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--primary-light);
 }
 
 .hero-image-card img {
@@ -354,11 +383,32 @@ body {
   color: white;
   box-shadow: var(--shadow-lg);
   transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.8s, height 0.8s;
+}
+
+.stat-card:hover::before {
+  width: 400px;
+  height: 400px;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: var(--shadow-2xl);
 }
 
 .stat-card h4 {
@@ -384,11 +434,29 @@ body {
   box-shadow: var(--shadow-md);
   transition: var(--transition);
   border-top: 4px solid var(--primary-color);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.department-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(8, 145, 178, 0.05), transparent);
+  transition: left 0.5s;
+}
+
+.department-card:hover::before {
+  left: 100%;
 }
 
 .department-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-2xl);
 }
 
 .department-icon {
@@ -427,16 +495,19 @@ body {
 }
 
 .doctor-card {
-  background: var(--bg-light);
-  border-radius: 16px;
+  background: var(--bg-white);
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow-md);
   transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
 }
 
 .doctor-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--primary-color);
 }
 
 .doctor-image {
@@ -488,11 +559,28 @@ body {
   box-shadow: var(--shadow-md);
   transition: var(--transition);
   border-left: 4px solid var(--secondary-color);
+  cursor: pointer;
+  position: relative;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: var(--primary-color);
+  transition: height 0.3s ease;
+}
+
+.service-card:hover::after {
+  height: 100%;
 }
 
 .service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) translateX(5px);
+  box-shadow: var(--shadow-2xl);
 }
 
 .service-card h3 {
@@ -537,22 +625,25 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
   animation: fadeIn 0.3s ease-out;
+  padding: 2rem;
 }
 
 .auth-modal {
   background: var(--bg-white);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   max-height: 90vh;
   overflow-y: auto;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-2xl);
 }
 
 .auth-header {
@@ -649,6 +740,8 @@ body {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+  transform: translateY(-1px);
 }
 
 .form-row {
@@ -712,18 +805,43 @@ body {
   color: var(--text-light);
   cursor: pointer;
   transition: var(--transition);
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 1rem;
+  position: relative;
+}
+
+.dashboard-tab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 70%;
+  background: var(--primary-color);
+  border-radius: 0 4px 4px 0;
+  transition: width 0.3s;
 }
 
 .dashboard-tab:hover {
   background: var(--bg-light);
   color: var(--text-dark);
+  padding-left: 2rem;
+}
+
+.dashboard-tab:hover::before {
+  width: 4px;
 }
 
 .dashboard-tab.active {
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
+  box-shadow: var(--shadow-md);
+  transform: translateX(5px);
+}
+
+.dashboard-tab.active::before {
+  width: 0;
 }
 
 .dashboard-main {
@@ -792,15 +910,17 @@ body {
 
 .appointment-card {
   padding: 2.5rem;
-  background: var(--bg-light);
+  background: var(--bg-white);
   border-radius: 12px;
   border-left: 4px solid var(--primary-color);
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .appointment-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateX(5px);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(8px);
+  background: var(--bg-light);
 }
 
 .appointment-header {
@@ -936,6 +1056,36 @@ body {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.section {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.doctor-info {
+  background: linear-gradient(to bottom, transparent 0%, var(--bg-white) 10%);
 }
 
 @media (max-width: 968px) {
