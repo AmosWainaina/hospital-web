@@ -4,14 +4,20 @@ let currentUser = null;
 let currentPatient = null;
 
 export async function initAuth() {
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  if (user) {
-    currentUser = user;
-    const patient = await getPatientProfile(user.id);
-    currentPatient = patient;
-    updateUIForAuthState(true);
-  } else {
+    if (user) {
+      currentUser = user;
+      const patient = await getPatientProfile(user.id);
+      currentPatient = patient;
+      updateUIForAuthState(true);
+    } else {
+      updateUIForAuthState(false);
+    }
+  } catch (error) {
+    console.error('Error initializing auth:', error);
+    // Even if there's an error, set the UI to logged out state
     updateUIForAuthState(false);
   }
 
@@ -177,14 +183,17 @@ export function setupAuthListeners() {
 
     try {
       await login(email, password);
+      // Close modal and redirect to dashboard after successful login
       authContainer.classList.add('auth-hidden');
       document.body.style.overflow = 'auto';
       loginForm.reset();
       errorDiv.textContent = '';
       errorDiv.classList.remove('show');
+      window.location.hash = '#dashboard';
     } catch (error) {
       errorDiv.textContent = error.message;
       errorDiv.classList.add('show');
+      // Keep modal open on error
     }
   });
 
@@ -209,16 +218,22 @@ export function setupAuthListeners() {
         gender: gender
       });
 
+      // Close modal after successful registration
       authContainer.classList.add('auth-hidden');
       document.body.style.overflow = 'auto';
       registerForm.reset();
       errorDiv.textContent = '';
       errorDiv.classList.remove('show');
 
+      // Switch to login tab after successful registration
+      const loginTab = document.querySelector('[data-tab="login"]');
+      if (loginTab) loginTab.click();
+
       alert('Registration successful! You can now login.');
     } catch (error) {
       errorDiv.textContent = error.message;
       errorDiv.classList.add('show');
+      // Keep modal open on error
     }
   });
 
