@@ -1,4 +1,4 @@
-import { getDepartments, getDoctors, getServices } from './supabase.js';
+import { getDepartments, getDoctors, getServices, getDoctorAvailability } from './supabase.js';
 
 const departmentIcons = {
   'emergency': '🚑',
@@ -170,25 +170,37 @@ export async function loadDoctors(departmentFilter = null) {
     }
 
     grid.innerHTML = '';
-    filteredDoctors.forEach(doctor => {
+    for (const doctor of filteredDoctors) {
       const card = document.createElement('div');
       card.className = 'doctor-card';
+
+      const availability = await getDoctorAvailability(doctor.id);
+      const availableDays = availability
+        .filter(a => a.is_available)
+        .map(a => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][a.day_of_week])
+        .join(', ');
+
+      const availabilityBadge = doctor.available
+        ? '<span class="availability-badge available">Available</span>'
+        : '<span class="availability-badge unavailable">Unavailable</span>';
 
       card.innerHTML = `
         <img src="${doctor.image_url}" alt="Dr. ${doctor.first_name} ${doctor.last_name}" class="doctor-image" onerror="this.src='https://via.placeholder.com/350x400?text=Dr.+${doctor.first_name}+${doctor.last_name}'">
         <div class="doctor-info">
+          ${availabilityBadge}
           <h3 class="doctor-name">Dr. ${doctor.first_name} ${doctor.last_name}</h3>
           <p class="doctor-specialization">${doctor.specialization}</p>
           <p class="doctor-details">
             <strong>Qualification:</strong> ${doctor.qualification}<br>
-            <strong>Experience:</strong> ${doctor.experience_years} years
+            <strong>Experience:</strong> ${doctor.experience_years} years<br>
+            <strong>Available:</strong> ${availableDays || 'By appointment'}
           </p>
           ${doctor.bio ? `<p class="doctor-bio">${doctor.bio}</p>` : ''}
         </div>
       `;
 
       grid.appendChild(card);
-    });
+    }
   } catch (error) {
     console.error('Error loading doctors:', error);
     grid.innerHTML = '<p>Failed to load doctors. Please try again later.</p>';

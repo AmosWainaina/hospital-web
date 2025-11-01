@@ -272,3 +272,51 @@ export async function getCheckInHistory(patientId, limit = 10) {
 
   return data;
 }
+
+export async function createConsultation(consultationData) {
+  const { data, error } = await supabase
+    .from('consultations')
+    .insert([consultationData])
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating consultation:', error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getPatientConsultations(patientId) {
+  const { data, error } = await supabase
+    .from('consultations')
+    .select(`
+      *,
+      doctor:doctors(first_name, last_name, specialization)
+    `)
+    .eq('patient_id', patientId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching consultations:', error);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getDoctorAvailability(doctorId) {
+  const { data, error } = await supabase
+    .from('doctor_availability')
+    .select('*')
+    .eq('doctor_id', doctorId)
+    .order('day_of_week');
+
+  if (error) {
+    console.error('Error fetching doctor availability:', error);
+    return [];
+  }
+
+  return data;
+}

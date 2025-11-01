@@ -175,6 +175,7 @@
                             <button class="dashboard-tab active" data-tab="check-in">Check In/Out</button>
                             <button class="dashboard-tab" data-tab="appointments">My Appointments</button>
                             <button class="dashboard-tab" data-tab="book">Book Appointment</button>
+                            <button class="dashboard-tab" data-tab="consultation">Contact Doctor</button>
                             <button class="dashboard-tab" data-tab="profile">My Profile</button>
                         </div>
                         <div class="dashboard-main">
@@ -234,6 +235,50 @@
                                     <div id="appointment-error" class="error-message"></div>
                                     <div id="appointment-success" class="success-message"></div>
                                 </form>
+                            </div>
+
+                            <div id="consultation-panel" class="dashboard-panel">
+                                <h3>Contact Doctor</h3>
+                                <div class="panel-tabs">
+                                    <button class="panel-tab active" data-panel-tab="send">Send Request</button>
+                                    <button class="panel-tab" data-panel-tab="history">My Consultations</button>
+                                </div>
+                                <div id="send-consultation-tab" class="panel-tab-content active">
+                                    <form id="consultation-form" class="consultation-form">
+                                        <div class="form-group">
+                                            <label for="consultation-doctor">Select Doctor</label>
+                                            <select id="consultation-doctor" required>
+                                                <option value="">Choose a doctor</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="consultation-subject">Subject</label>
+                                            <input type="text" id="consultation-subject" required placeholder="Brief description of your concern">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="consultation-message">Your Message</label>
+                                            <textarea id="consultation-message" rows="6" required placeholder="Describe your health concern or question in detail"></textarea>
+                                        </div>
+                                        <div class="form-group checkbox-group">
+                                            <label>
+                                                <input type="checkbox" id="consultation-callback">
+                                                Request a callback from the doctor
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="consultation-contact-time">Preferred Contact Time (Optional)</label>
+                                            <input type="text" id="consultation-contact-time" placeholder="e.g., Weekdays after 5PM">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Send Consultation Request</button>
+                                        <div id="consultation-error" class="error-message"></div>
+                                        <div id="consultation-success" class="success-message"></div>
+                                    </form>
+                                </div>
+                                <div id="history-consultation-tab" class="panel-tab-content">
+                                    <div id="consultations-list" class="consultations-list">
+                                        <div class="loading">Loading consultations...</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="profile-panel" class="dashboard-panel">

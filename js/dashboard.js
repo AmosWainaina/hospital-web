@@ -13,7 +13,10 @@ import {
   createCheckIn,
   checkOut,
   getActiveCheckIn,
-  getCheckInHistory
+  getCheckInHistory,
+  createConsultation,
+  getPatientConsultations,
+  getDoctors
 } from './supabase.js';
 
 export function setupDashboard() {
@@ -21,6 +24,7 @@ export function setupDashboard() {
   setupCheckIn();
   setupAppointmentBooking();
   setupProfile();
+  setupConsultation();
 }
 
 function setupDashboardTabs() {
@@ -41,6 +45,26 @@ function setupDashboardTabs() {
         loadAppointments();
       } else if (targetTab === 'check-in') {
         loadCheckInStatus();
+      } else if (targetTab === 'consultation') {
+        loadConsultations();
+      }
+    });
+  });
+
+  const panelTabs = document.querySelectorAll('.panel-tab');
+  panelTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetPanelTab = tab.dataset.panelTab;
+
+      panelTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const panelContents = document.querySelectorAll('.panel-tab-content');
+      panelContents.forEach(content => content.classList.remove('active'));
+      document.getElementById(`${targetPanelTab}-consultation-tab`).classList.add('active');
+
+      if (targetPanelTab === 'history') {
+        loadConsultations();
       }
     });
   });
@@ -314,5 +338,105 @@ async function setupProfile() {
       errorDiv.classList.add('show');
       successDiv.classList.remove('show');
     }
+  });
+}
+
+async function setupConsultation() {
+  const form = document.getElementById('consultation-form');
+  const doctorSelect = document.getElementById('consultation-doctor');
+
+  const doctors = await getDoctors();
+  doctors.forEach(doctor => {
+    const option = document.createElement('option');
+    option.value = doctor.id;
+    option.textContent = `Dr. ${doctor.first_name} ${doctor.last_name} - ${doctor.specialization}`;
+    doctorSelect.appendChild(option);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const { patient } = getCurrentUserData();
+    if (!patient) {
+      alert('Please complete your profile first');
+      return;
+    }
+
+    const errorDiv = document.getElementById('consultation-error');
+    const successDiv = document.getElementById('consultation-success');
+
+    const consultationData = {
+      patient_id: patient.id,
+      doctor_id: doctorSelect.value,
+      subject: document.getElementById('consultation-subject').value,
+      message: document.getElementById('consultation-message').value,
+      callback_requested: document.getElementById('consultation-callback').checked,
+      preferred_contact_time: document.getElementById('consultation-contact-time').value,
+      status: 'pending'
+    };
+
+    try {
+      await createConsultation(consultationData);
+
+      successDiv.textContent = 'Consultation request sent successfully! The doctor will respond soon.';
+      successDiv.classList.add('show');
+      errorDiv.classList.remove('show');
+
+      form.reset();
+
+      setTimeout(() => {
+        successDiv.classList.remove('show');
+      }, 5000);
+    } catch (error) {
+      console.error('Consultation creation error:', error);
+      errorDiv.textContent = 'Failed to send consultation request. Please try again.';
+      errorDiv.classList.add('show');
+      successDiv.classList.remove('show');
+    }
+  });
+}
+
+async function loadConsultations() {
+  const { patient } = getCurrentUserData();
+  if (!patient) return;
+
+  const listDiv = document.getElementById('consultations-list');
+  listDiv.innerHTML = '<div class="loading">Loading consultations...</div>';
+
+  const consultations = await getPatientConsultations(patient.id);
+
+  if (consultations.length === 0) {
+    listDiv.innerHTML = '<p>No consultations found. Send your first consultation request!</p>';
+    return;
+  }
+
+  listDiv.innerHTML = '';
+  consultations.forEach(consultation => {
+    const date = new Date(consultation.created_at);
+
+    const card = document.createElement('div');
+    card.className = 'consultation-card';
+    card.innerHTML = `
+      <div class="consultation-header">
+        <h4>${consultation.subject}</h4>
+        <span class="consultation-status ${consultation.status}">${consultation.status}</span>
+      </div>
+      <div class="consultation-details">
+        <p><strong>Date:</strong> ${date.toLocaleDateString()} ${date.toLocaleTimeString()}</p>
+        <p><strong>Doctor:</strong> Dr. ${consultation.doctor.first_name} ${consultation.doctor.last_name}</p>
+        <p><strong>Specialization:</strong> ${consultation.doctor.specialization}</p>
+        <p><strong>Your Message:</strong> ${consultation.message}</p>
+        ${consultation.callback_requested ? '<p><strong>Callback Requested:</strong> Yes</p>' : ''}
+        ${consultation.preferred_contact_time ? `<p><strong>Preferred Contact Time:</strong> ${consultation.preferred_contact_time}</p>` : ''}
+        ${consultation.response ? `
+          <div class="consultation-response">
+            <p><strong>Doctor's Response:</strong></p>
+            <p>${consultation.response}</p>
+            <p><small>Responded: ${new Date(consultation.responded_at).toLocaleString()}</small></p>
+          </div>
+        ` : '<p><em>Awaiting doctor response...</em></p>'}
+      </div>
+    `;
+    listDiv.appendChild(card);
   });
 }
