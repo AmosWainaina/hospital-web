@@ -75,7 +75,12 @@ async function setupCheckIn() {
   const checkOutBtn = document.getElementById('check-out-btn');
 
   checkInBtn.addEventListener('click', async () => {
-    const { patient } = getCurrentUserData();
+    const { user, patient } = getCurrentUserData();
+    if (!user) {
+      alert('Please login to check in');
+      return;
+    }
+
     if (!patient) {
       alert('Please complete your profile first');
       return;
@@ -95,7 +100,12 @@ async function setupCheckIn() {
   });
 
   checkOutBtn.addEventListener('click', async () => {
-    const { patient } = getCurrentUserData();
+    const { user, patient } = getCurrentUserData();
+    if (!user) {
+      alert('Please login to check out');
+      return;
+    }
+
     if (!patient) return;
 
     const activeCheckIn = await getActiveCheckIn(patient.id);
@@ -206,7 +216,12 @@ async function setupAppointmentBooking() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const { patient } = getCurrentUserData();
+    const { user, patient } = getCurrentUserData();
+    if (!user) {
+      alert('Please login to book an appointment');
+      return;
+    }
+
     if (!patient) {
       alert('Please complete your profile first');
       return;
@@ -356,7 +371,12 @@ async function setupConsultation() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const { patient } = getCurrentUserData();
+    const { user, patient } = getCurrentUserData();
+    if (!user) {
+      alert('Please login to send a consultation request');
+      return;
+    }
+
     if (!patient) {
       alert('Please complete your profile first');
       return;

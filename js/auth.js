@@ -57,22 +57,18 @@ function updateUIForAuthState(isAuthenticated) {
   const dashboardSection = document.getElementById('dashboard');
   const authContainer = document.getElementById('auth-container');
 
+  // Always show dashboard navigation and section
+  dashboardNav.classList.remove('hidden');
+  dashboardSection.classList.remove('hidden');
+
   if (isAuthenticated) {
     loginBtn.classList.add('hidden');
     logoutBtn.classList.remove('hidden');
-    dashboardNav.classList.remove('hidden');
     authContainer.classList.add('auth-hidden');
   } else {
     loginBtn.classList.remove('hidden');
     logoutBtn.classList.add('hidden');
-    dashboardNav.classList.add('hidden');
-    dashboardSection.classList.add('hidden');
     authContainer.classList.add('auth-hidden');
-
-    const hash = window.location.hash;
-    if (hash === '#dashboard') {
-      window.location.hash = '#home';
-    }
   }
 }
 
@@ -254,8 +250,13 @@ export function setupAuthListeners() {
         if (bookTab) bookTab.click();
       }, 100);
     } else {
+      // Open auth modal with login tab active for appointment scheduling
       authContainer.classList.remove('auth-hidden');
       document.body.style.overflow = 'hidden';
+
+      // Ensure login tab is active
+      const loginTab = document.querySelector('[data-tab="login"]');
+      if (loginTab) loginTab.click();
     }
   });
 }
